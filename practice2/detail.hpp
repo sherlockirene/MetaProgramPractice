@@ -5,17 +5,17 @@ namespace Model
 {
     namespace Core
     {
+        double CalculateHelper(
+            const double &x, const double &x1, const double &x2, const double &x3,
+            const double &y1, const double &y2, const double &y3)
+        {
+            double a = (x - x2) * (x - x3) / (x1 - x2) / (x1 - x3);
+            double b = (x - x1) * (x - x3) / (x2 - x1) / (x2 - x3);
+            double c = (x - x1) * (x - x2) / (x3 - x1) / (x3 - x2);
+            return a * y1 + b * y2 + c * y3;
+        }
         namespace detail
         {
-            double CalculateHelper(
-                const double &x, const double &x1, const double &x2, const double &x3,
-                const double &y1, const double &y2, const double &y3)
-            {
-                double a = (x - x2) * (x - x3) / (x1 - x2) / (x1 - x3);
-                double b = (x - x1) * (x - x3) / (x2 - x1) / (x2 - x3);
-                double c = (x - x1) * (x - x2) / (x3 - x1) / (x3 - x2);
-                return a * y1 + b * y2 + c * y3;
-            }
 
             RV CalculateHelperWithTime(const Plane &p1, const Plane &p2, const Plane &p3, const Plane &target, Plane &result)
             {
@@ -70,7 +70,7 @@ namespace Model
             }
 
             template <typename T, typename DataType>
-            RV caclulate_imp2(const DataType &p1, const DataType &p2, const DataType &p3, DataType &result, const DataType &target)
+            RV caclulate_imp_varible(const DataType &p1, const DataType &p2, const DataType &p3, DataType &result, const DataType &target)
             {
                 return caclulate_imp2_is_time_type(p1, p2, p3, result, target, typename boost::integral_constant<bool, is_calc_by_time<T>::value>());
             }
@@ -85,27 +85,27 @@ namespace Model
                 auto &p1 = *prev(mid);
                 auto &p2 = *mid;
                 auto &p3 = *next(mid);
-                auto rv = caclulate_imp2<T>(p1, p2, p3, result, target);
+                auto rv = caclulate_imp_varible<T>(p1, p2, p3, result, target);
                 return rv == SUCCESS ? mid : end;
             }
             template <typename T, typename InputIterator, typename DataType>
             InputIterator caclulate_imp_predicate(InputIterator begin, InputIterator end, DataType &result, const DataType &target, const boost::true_type &)
             {
-                auto p = [&target](const Plane &plane){
-                    return plane.time > target.time; };
+                auto p = [&target](const Plane &plane)
+                { return plane.time > target.time; };
                 return caclulate_imp_serch<T>(begin, end, result, target, p);
             }
 
             template <typename T, typename InputIterator, typename DataType>
             InputIterator caclulate_imp_predicate(InputIterator begin, InputIterator end, DataType &result, const DataType &target, const boost::false_type &)
             {
-                auto p =  [&target](const Plane &plane) {
-                    return plane.pos.x() > target.pos.x(); };
+                auto p = [&target](const Plane &plane)
+                { return plane.pos.x() > target.pos.x(); };
                 return caclulate_imp_serch<T>(begin, end, result, target, p);
             }
 
             template <typename T, typename InputIterator, typename DataType>
-            InputIterator caclulate_imp(InputIterator begin, InputIterator end, DataType &result, const DataType &target)
+            InputIterator caclulate_container_imp(InputIterator begin, InputIterator end, DataType &result, const DataType &target)
             {
                 typedef typename boost::integral_constant<bool, is_calc_by_time<T>::value> truth_type;
                 return caclulate_imp_predicate<T>(begin, end, result, target, truth_type());

@@ -54,10 +54,9 @@ BOOST_AUTO_TEST_SUITE(test_suite1)
 
 BOOST_AUTO_TEST_CASE(calculate_help_test_case)
 {
-    shared_ptr<Calculator> calculator = std::make_shared<Calculator>();
-    auto res = calculator->CalculateHelper(1.5, 1, 2, 3, 10, 20, 30);
+    auto res = CalculateHelper(1.5, 1, 2, 3, 10, 20, 30);
     BOOST_CHECK_LT(fabs(res - 15), TEST_DB_EQUAL);
-    res = calculator->CalculateHelper(1.5, 1, 2, 3, 100, 200, 300);
+    res = CalculateHelper(1.5, 1, 2, 3, 100, 200, 300);
     BOOST_CHECK_LT(fabs(res - 150), TEST_DB_EQUAL);
 }
 
