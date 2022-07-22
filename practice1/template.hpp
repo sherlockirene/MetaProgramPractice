@@ -24,7 +24,7 @@ public:
 
     RV CalculateNormalWithTime(const std::vector<Plane>& planes,const Plane& target_plane, Plane& result)
     {
-        if(planes.size() <= 3) return FAILURE;
+        if(planes.size() < 3) return FAILURE;
         auto mid = find_if(next(planes.begin()), prev(planes.end()), [&target_plane](const Plane& plane){
             return plane.time > target_plane.time;
         });
@@ -36,7 +36,7 @@ public:
 
     RV CalculateNormalWithPosX(const std::vector<Plane>& planes,const Plane& target_plane, Plane& result)
     {
-        if(planes.size() <= 3) return FAILURE;
+        if(planes.size() < 3) return FAILURE;
         auto mid = find_if(next(planes.begin()), prev(planes.end()), [&target_plane](const Plane& plane){
             return plane.pos.x() > target_plane.pos.x();
         });
@@ -80,6 +80,8 @@ public:
         result.pos_1.z() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.z(), p2.pos_1.z(), p3.pos_1.z());
         result.vel_1.x() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel_1.x(), p2.vel_1.x(), p3.vel_1.x());
         result.vel_1.y() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel_1.y(), p2.vel_1.y(), p3.vel_1.y());
+        result.vel_1.z() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel_1.z(), p2.vel_1.z(), p3.vel_1.z());
+        result.distance = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.distance, p2.distance, p3.distance);
 
         return SUCCESS;
     }
@@ -88,10 +90,11 @@ public:
         const double& x, const double& x1, const double& x2, const double& x3, 
         const double& y1, const double& y2, const double& y3)
     {
-        double a = -(x - x1) / (x2 - x1);
-        double b = -(x - x2) / (x3 - x2);
-        double c = -(x - x3) / (x1 - x3);
-        return a * y1 + b * y2 + c * y3;
+        double a = (x - x2)*(x - x3)/(x1 - x2)/(x1 - x3);
+        double b = (x - x1)*(x - x3)/(x2 - x1)/(x2 - x3);
+        double c = (x - x1)*(x - x2)/(x3 - x1)/(x3 - x2);
+        return a*y1 + b*y2 + c*y3;
     }
+
 };
 #endif
