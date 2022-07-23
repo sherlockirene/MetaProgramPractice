@@ -16,62 +16,26 @@ namespace Model
         }
         namespace detail
         {
-
-            RV CalculateHelperWithTime(const Plane &p1, const Plane &p2, const Plane &p3, const Plane &target, Plane &result)
-            {
-                result.time = target.time;
-                result.pos.x() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.pos.x(), p2.pos.x(), p3.pos.x());
-                result.pos.y() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.pos.y(), p2.pos.y(), p3.pos.y());
-                result.pos.z() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.pos.z(), p2.pos.z(), p3.pos.z());
-                result.vel.x() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.vel.x(), p2.vel.x(), p3.vel.x());
-                result.vel.y() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.vel.y(), p2.vel.y(), p3.vel.y());
-                result.vel.z() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.vel.z(), p2.vel.z(), p3.vel.z());
-                result.pos_1.x() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.pos_1.x(), p2.pos_1.x(), p3.pos_1.x());
-                result.pos_1.y() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.pos_1.y(), p2.pos_1.y(), p3.pos_1.y());
-                result.pos_1.z() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.pos_1.z(), p2.pos_1.z(), p3.pos_1.z());
-                result.vel_1.x() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.vel_1.x(), p2.vel_1.x(), p3.vel_1.x());
-                result.vel_1.y() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.vel_1.y(), p2.vel_1.y(), p3.vel_1.y());
-                result.vel_1.z() = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.vel_1.z(), p2.vel_1.z(), p3.vel_1.z());
-                result.distance = CalculateHelper(target.time, p1.time, p2.time, p3.time, p1.distance, p2.distance, p3.distance);
-
-                return SUCCESS;
-            }
-
-            RV CalculateHelperWithPosX(const Plane &p1, const Plane &p2, const Plane &p3, const Plane &target, Plane &result)
-            {
-                result.time = target.time;
-                result.pos.x() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.x(), p2.pos_1.x(), p3.pos_1.x());
-                result.pos.y() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.y(), p2.pos_1.y(), p3.pos_1.y());
-                result.pos.z() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.z(), p2.pos_1.z(), p3.pos_1.z());
-                result.vel.x() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel.x(), p2.vel.x(), p3.vel.x());
-                result.vel.y() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel.y(), p2.vel.y(), p3.vel.y());
-                result.vel.z() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel.z(), p2.vel.z(), p3.vel.z());
-                result.pos_1.x() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.x(), p2.pos_1.x(), p3.pos_1.x());
-                result.pos_1.y() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.y(), p2.pos_1.y(), p3.pos_1.y());
-                result.pos_1.z() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.pos_1.z(), p2.pos_1.z(), p3.pos_1.z());
-                result.vel_1.x() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel_1.x(), p2.vel_1.x(), p3.vel_1.x());
-                result.vel_1.y() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel_1.y(), p2.vel_1.y(), p3.vel_1.y());
-                result.vel_1.z() = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.vel_1.z(), p2.vel_1.z(), p3.vel_1.z());
-                result.distance = CalculateHelper(target.pos.x(), p1.pos.x(), p2.pos.x(), p3.pos.x(), p1.distance, p2.distance, p3.distance);
-
-                return SUCCESS;
-            }
-
             template <typename DataType>
             RV caclulate_imp2_is_time_type(const DataType &p1, const DataType &p2, const DataType &p3, DataType &result, const DataType &target, const boost::true_type &)
             {
-                return CalculateHelperWithTime(p1, p2, p3, target, result);
+                REGISTER_NORMAL_TYPE(Plane, time, distance);
+                REGISTER_POINT_TYPE(Plane, time, pos, vel, pos_1, vel_1);
+                return SUCCESS;
             }
 
             template <typename DataType>
             RV caclulate_imp2_is_time_type(const DataType &p1, const DataType &p2, const DataType &p3, DataType &result, const DataType &target, const boost::false_type &)
             {
-                return CalculateHelperWithPosX(p1, p2, p3, target, result);
+                REGISTER_NORMAL_TYPE(Plane, pos.x(), distance);
+                REGISTER_POINT_TYPE(Plane, pos.x(), pos, vel, pos_1, vel_1);
+                return SUCCESS;
             }
 
             template <typename T, typename DataType>
             RV caclulate_imp_varible(const DataType &p1, const DataType &p2, const DataType &p3, DataType &result, const DataType &target)
             {
+                result.time = target.time;
                 return caclulate_imp2_is_time_type(p1, p2, p3, result, target, typename boost::integral_constant<bool, is_calc_by_time<T>::value>());
             }
 
@@ -88,6 +52,7 @@ namespace Model
                 auto rv = caclulate_imp_varible<T>(p1, p2, p3, result, target);
                 return rv == SUCCESS ? mid : end;
             }
+
             template <typename T, typename InputIterator, typename DataType>
             InputIterator caclulate_imp_predicate(InputIterator begin, InputIterator end, DataType &result, const DataType &target, const boost::true_type &)
             {
@@ -110,7 +75,6 @@ namespace Model
                 typedef typename boost::integral_constant<bool, is_calc_by_time<T>::value> truth_type;
                 return caclulate_imp_predicate<T>(begin, end, result, target, truth_type());
             }
-
         }
     }
 }

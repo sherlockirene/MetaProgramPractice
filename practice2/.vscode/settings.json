@@ -79,6 +79,8 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "variant": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "__functional_base_03": "cpp",
+        "filesystem": "cpp"
     }
 }

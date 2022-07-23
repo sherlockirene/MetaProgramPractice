@@ -7,7 +7,6 @@ using std::prev;
 
 namespace Model
 {
-
     namespace Core
     {
         double CalculateHelper(
