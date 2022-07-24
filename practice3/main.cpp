@@ -3,11 +3,9 @@
 #include <iostream>
 #include <vector>
 #include <calculate/calculate.hpp>
-#include "DataType.hpp"
 
 static const double TEST_DB_EQUAL = 0.0000001;
 
-using std::shared_ptr;
 using std::vector;
 using namespace Model::Core;
 static int i = 0;

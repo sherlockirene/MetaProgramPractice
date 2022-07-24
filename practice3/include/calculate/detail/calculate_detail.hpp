@@ -2,7 +2,7 @@
 #define __TEMPLATE_DETAIL_HPP__
 #include <iostream>
 #include "calculate_def.hpp"
-#include "../../DataType.hpp"
+#include "data_type.hpp"
 namespace Model
 {
     namespace Core
